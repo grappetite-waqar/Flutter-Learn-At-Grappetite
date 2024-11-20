@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
 
-class MemorizeTestScreen extends StatefulWidget {
-  const MemorizeTestScreen({super.key});
+class MemorizeTestPage extends StatefulWidget {
+  static const String ROUTE_NAME = '/memorize-test';
+  const MemorizeTestPage({super.key});
 
   @override
-  State<MemorizeTestScreen> createState() => _MemorizeTestScreenState();
+  State<MemorizeTestPage> createState() => _MemorizeTestPageState();
 }
 
-class _MemorizeTestScreenState extends State<MemorizeTestScreen> {
+class _MemorizeTestPageState extends State<MemorizeTestPage> {
   final List<String> verseWords = [
-    "You",
-    "will",
-    "seek",
-    "me",
-    "and",
-    "find",
-    "me",
-    "when"
+    'You',
+    'will',
+    'seek',
+    'me',
+    'and',
+    'find',
+    'me',
+    'when',
   ];
   int currentWordIndex = 0;
   String textFieldContent = '';
   final TextEditingController _controller = TextEditingController();
 
-  void _handleInput(String input) {
+  void _handleInput(final String input) {
     if (currentWordIndex >= verseWords.length) return;
 
     final correctWord = verseWords[currentWordIndex];
@@ -50,7 +51,7 @@ class _MemorizeTestScreenState extends State<MemorizeTestScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -88,7 +89,7 @@ class _MemorizeTestScreenState extends State<MemorizeTestScreen> {
               TextField(
                 controller: _controller,
                 maxLines: null,
-                onChanged: (value) {
+                onChanged: (final value) {
                   if (value.isNotEmpty) {
                     String lastChar = value[value.length - 1];
                     _handleInput(lastChar);

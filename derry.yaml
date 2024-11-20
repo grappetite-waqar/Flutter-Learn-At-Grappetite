@@ -1,0 +1,43 @@
+generate-code:
+  build: dart run build_runner build
+  watch: dart run build_runner watch
+  rebuild: dart run build_runner build --delete-conflicting-outputs
+  delete: find . -maxdepth 20 -type f \( -name "*.inject.summary" -o -name "*.inject.dart" -o  -name "*.g.dart" -o  -name "*.svg.vec" \) -delete
+
+match:
+  appstore: |
+    export FASTLANE_SKIP_UPDATE_CHECK=1 &&
+    cd ios &&
+    bundle install &&
+    bundle update fastlane &&
+    bundle exec fastlane app_match type:appstore
+  development: |
+    export FASTLANE_SKIP_UPDATE_CHECK=1 &&
+    cd ios &&
+    bundle install &&
+    bundle update fastlane &&
+    bundle exec fastlane app_match type:development
+
+compile:
+  - flutter clean
+  - $generate-code:delete
+  - $generate-code:rebuild
+  - flutter pub get
+
+build:
+  android: |
+    export FASTLANE_SKIP_UPDATE_CHECK=1 &&
+    read -p 'Enter Environment (production/staging):' dartEnv &&
+    cd android &&
+    bundle install &&
+    bundle update fastlane &&
+    bundle exec fastlane build dartEnv:$dartEnv &&
+    bundle exec fastlane deploy dartEnv:$dartEnv
+  ios: |
+    export FASTLANE_SKIP_UPDATE_CHECK=1 &&
+    read -p 'Enter Environment (production/staging):' dartEnv &&
+    cd ios &&
+    bundle install &&
+    bundle update fastlane &&
+    bundle exec fastlane build dartEnv:$dartEnv &&
+    bundle exec fastlane deploy dartEnv:$dartEnv

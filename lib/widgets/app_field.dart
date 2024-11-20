@@ -18,7 +18,7 @@ class AppField extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return TextFormField(
       controller: controller,
       textInputAction: textInputAction,

@@ -1,4 +1,4 @@
-package com.example.learnatgrap
+package com.grappetite.learnatgrap
 
 import io.flutter.embedding.android.FlutterActivity
 

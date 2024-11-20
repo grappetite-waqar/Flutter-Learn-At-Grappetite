@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1024984712786",
+    "project_id": "learn-at-grap",
+    "storage_bucket": "learn-at-grap.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024984712786:android:fbea2aecb4889b552c018b",
+        "android_client_info": {
+          "package_name": "com.grappetite.learnatgrap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbakKLZvtFbKAI1n9TzGyWxuZENvhllPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

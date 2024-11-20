@@ -1,12 +1,45 @@
 plugins {
     id "com.android.application"
+    // START: FlutterFire Configuration
+    id 'com.google.gms.google-services'
+    // END: FlutterFire Configuration
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+// keystore
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('./app/key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+} else {
+    throw new GradleException('key.properties file not found in android/app')
+}
+
+// Environment
+def dartDefines = [
+        DART_ENV: 'staging',
+]
+if (project.hasProperty('dart-defines')) {
+    dartDefines = dartDefines + project.property('dart-defines')
+            .split(',')
+            .collectEntries { entry ->
+                def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+                [(pair.first()): pair.last()]
+            }
+}
+
+def dartEnvProperties = new Properties()
+def dartEnvPropertiesFile = rootProject.file('../config/' + dartDefines.DART_ENV + '.config')
+if (dartEnvPropertiesFile.exists()) {
+    dartEnvProperties.load(new FileInputStream(dartEnvPropertiesFile))
+} else {
+    throw new GradleException(dartDefines.DART_ENV + '.config file not found for in flutter config/ directory')
+}
+
 android {
-    namespace = "com.example.learnatgrap"
+    namespace = "com.grappetite.learnatgrap"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -20,21 +53,34 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.learnatgrap"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        applicationId = "com.grappetite.learnatgrap"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        resValue "string", "app_name", dartEnvProperties['APP_NAME']
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('./keystore.jks')
+            storePassword keystoreProperties['password']
+            keyAlias 'learnatgrap'
+            keyPassword keystoreProperties['password']
+        }
     }
 
     buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+        }
+        profile {
+            signingConfig signingConfigs.release
+        }
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }

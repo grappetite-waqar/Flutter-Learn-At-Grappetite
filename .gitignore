@@ -41,3 +41,12 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# auto generated
+*.g.dart
+*.drift.dart
+*.freezed.dart
+*.tailor.dart
+untranslated-messages.json
+
+**/.DS_Store
